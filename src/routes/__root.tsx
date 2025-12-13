@@ -15,7 +15,7 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'MakeTheClip | Viral Clips With AI',
       },
     ],
     links: [
@@ -35,7 +35,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      {/* make it dark mode by defualt */}
+      <body className="dark">
         {children}
         <TanStackDevtools
           config={{
