@@ -126,7 +126,13 @@ export function Navbar() {
           </NavigationMenu>
           <Button
             size="default"
-            className="bg-violet-600 font-semibold uppercase text-white transition-colors hover:bg-violet-500"
+            className="font-semibold bg-gray-800 hover:bg-gray-700 hover:cursor-pointer uppercase text-white/80 hover:text-white"
+          >
+            Sign In
+          </Button>
+          <Button
+            size="default"
+            className="bg-violet-600 font-semibold uppercase text-white hover:cursor-pointer transition-colors hover:bg-violet-500"
           >
             Get Started
           </Button>
@@ -147,7 +153,7 @@ export function Navbar() {
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger
-              nativeButton={false}
+              nativeButton={true}
               render={
                 <Button
                   variant="ghost"
@@ -175,7 +181,7 @@ export function Navbar() {
                   </span>
                 </div>
                 <SheetClose
-                  nativeButton={false}
+                  nativeButton={true}
                   render={
                     <Button
                       variant="ghost"
