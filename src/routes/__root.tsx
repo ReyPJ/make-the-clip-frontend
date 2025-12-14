@@ -3,6 +3,7 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import appCss from '../styles.css?url'
+import { ThemeProvider } from '@/hooks/use-theme'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -31,13 +32,14 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
-      {/* make it dark mode by defualt */}
-      <body className="dark">
-        {children}
+      <body>
+        <ThemeProvider defaultTheme="dark" storageKey="ui-theme">
+          {children}
+        </ThemeProvider>
         <TanStackDevtools
           config={{
             position: 'bottom-right',
