@@ -1,4 +1,14 @@
-import { Brain, Captions, FileText, Sparkles, Upload } from 'lucide-react'
+import {
+  Brain,
+  Captions,
+  ChevronRight,
+  FileText,
+  Sparkles,
+  Upload,
+} from 'lucide-react'
+import * as motion from 'motion/react-client'
+import { useScroll, useTransform } from 'motion/react'
+import { useRef } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -49,105 +59,299 @@ const steps = [
 const colorClasses = {
   blue: {
     gradient: 'from-blue-500 to-cyan-500',
+    gradientVia: 'from-blue-500 via-cyan-400 to-blue-500',
     bg: 'bg-blue-500',
     bgLight: 'bg-blue-100 dark:bg-blue-900/50',
     text: 'text-blue-600 dark:text-blue-400',
-    glow: 'bg-blue-500/30',
-    shadow: 'shadow-blue-500/25',
+    glow: 'bg-blue-500/40',
+    shadow: 'shadow-blue-500/30',
     border: 'border-blue-500/30',
+    ring: 'ring-blue-500/20',
   },
   violet: {
     gradient: 'from-violet-500 to-purple-500',
+    gradientVia: 'from-violet-500 via-purple-400 to-violet-500',
     bg: 'bg-violet-500',
     bgLight: 'bg-violet-100 dark:bg-violet-900/50',
     text: 'text-violet-600 dark:text-violet-400',
-    glow: 'bg-violet-500/30',
-    shadow: 'shadow-violet-500/25',
+    glow: 'bg-violet-500/40',
+    shadow: 'shadow-violet-500/30',
     border: 'border-violet-500/30',
+    ring: 'ring-violet-500/20',
   },
   purple: {
     gradient: 'from-purple-500 to-pink-500',
+    gradientVia: 'from-purple-500 via-pink-400 to-purple-500',
     bg: 'bg-purple-500',
     bgLight: 'bg-purple-100 dark:bg-purple-900/50',
     text: 'text-purple-600 dark:text-purple-400',
-    glow: 'bg-purple-500/30',
-    shadow: 'shadow-purple-500/25',
+    glow: 'bg-purple-500/40',
+    shadow: 'shadow-purple-500/30',
     border: 'border-purple-500/30',
+    ring: 'ring-purple-500/20',
   },
   pink: {
     gradient: 'from-pink-500 to-rose-500',
+    gradientVia: 'from-pink-500 via-rose-400 to-pink-500',
     bg: 'bg-pink-500',
     bgLight: 'bg-pink-100 dark:bg-pink-900/50',
     text: 'text-pink-600 dark:text-pink-400',
-    glow: 'bg-pink-500/30',
-    shadow: 'shadow-pink-500/25',
+    glow: 'bg-pink-500/40',
+    shadow: 'shadow-pink-500/30',
     border: 'border-pink-500/30',
+    ring: 'ring-pink-500/20',
   },
   emerald: {
     gradient: 'from-emerald-500 to-green-500',
+    gradientVia: 'from-emerald-500 via-green-400 to-emerald-500',
     bg: 'bg-emerald-500',
     bgLight: 'bg-emerald-100 dark:bg-emerald-900/50',
     text: 'text-emerald-600 dark:text-emerald-400',
-    glow: 'bg-emerald-500/30',
-    shadow: 'shadow-emerald-500/25',
+    glow: 'bg-emerald-500/40',
+    shadow: 'shadow-emerald-500/30',
     border: 'border-emerald-500/30',
+    ring: 'ring-emerald-500/20',
   },
 }
 
+const fadeInUp = {
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0 },
+}
+
+const fadeInLeft = {
+  initial: { opacity: 0, x: -50 },
+  animate: { opacity: 1, x: 0 },
+}
+
+const fadeInRight = {
+  initial: { opacity: 0, x: 50 },
+  animate: { opacity: 1, x: 0 },
+}
+
+const scaleIn = {
+  initial: { opacity: 0, scale: 0.5 },
+  animate: { opacity: 1, scale: 1 },
+}
+
 export function HowItWorks() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const timelineRef = useRef<HTMLDivElement>(null)
+
+  const { scrollYProgress: sectionProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ['start end', 'end start'],
+  })
+
+  // Timeline progress bar grows as you scroll
+  const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1])
+
+  // Parallax transforms using viewport units for dramatic effect
+  const orbY1 = useTransform(sectionProgress, [0, 1], ['0vh', '50vh'])
+  const orbY2 = useTransform(sectionProgress, [0, 1], ['10vh', '-40vh'])
+  const orbY3 = useTransform(sectionProgress, [0, 1], ['20vh', '-30vh'])
+  // Multiple layers at different speeds for depth
+  const layerSlow = useTransform(sectionProgress, [0, 1], ['0vh', '40vh'])
+  const layerMedium = useTransform(sectionProgress, [0, 1], ['0vh', '70vh'])
+  const layerFast = useTransform(sectionProgress, [0, 1], ['0vh', '100vh'])
+  const layerReverse = useTransform(sectionProgress, [0, 1], ['0vh', '-50vh'])
+
   return (
-    <section className="relative w-full overflow-hidden bg-linear-to-b from-violet-100/50 via-background to-purple-100/50 py-20 dark:from-muted/50 dark:via-background dark:to-muted/50 sm:py-32">
-      {/* Animated gradient mesh background */}
+    <section
+      ref={sectionRef}
+      className="relative w-full overflow-hidden bg-linear-to-b from-violet-100/50 via-background to-purple-100/50 py-20 dark:from-muted/50 dark:via-background dark:to-muted/50 sm:py-32"
+    >
+      {/* Background gradient accents */}
       <div className="pointer-events-none absolute inset-0">
-        {/* Top gradient accent - very bright */}
         <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-violet-600 to-transparent dark:via-violet-500" />
         <div className="absolute inset-x-0 top-0 h-40 bg-linear-to-b from-violet-400/30 to-transparent dark:from-violet-500/15" />
-
-        {/* Large animated radial glow from center - intense for light mode */}
-        <div className="absolute left-1/2 top-1/2 size-350 -translate-x-1/2 -translate-y-1/2 animate-[pulse_8s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,var(--tw-gradient-stops))] from-violet-400/40 via-purple-400/20 to-transparent dark:from-violet-500/20 dark:via-purple-500/10" />
-
-        {/* Animated diagonal light beams - very visible in light mode */}
-        <div className="absolute -left-1/4 -top-1/2 h-[200%] w-3/4 animate-[beam-slide_12s_ease-in-out_infinite] rotate-20 bg-linear-to-b from-transparent via-violet-400/30 to-transparent blur-3xl dark:via-violet-500/15" />
-        <div className="absolute -right-1/4 -top-1/2 h-[200%] w-3/4 animate-[beam-slide_15s_ease-in-out_infinite_reverse] -rotate-20 bg-linear-to-b from-transparent via-purple-400/30 to-transparent blur-3xl dark:via-purple-500/15" />
-
-        {/* Floating accent orbs - much more intense for light mode */}
-        <div className="absolute left-[10%] top-[20%] size-64 animate-[float_20s_ease-in-out_infinite] rounded-full bg-blue-400/40 blur-[100px] dark:bg-blue-500/20" />
-        <div className="absolute right-[15%] top-[60%] size-72 animate-[float_18s_ease-in-out_infinite_2s] rounded-full bg-pink-400/35 blur-[100px] dark:bg-pink-500/15" />
-        <div className="absolute bottom-[10%] left-[40%] size-56 animate-[float_14s_ease-in-out_infinite_reverse] rounded-full bg-emerald-400/35 blur-[80px] dark:bg-emerald-500/15" />
       </div>
 
-      {/* Dot matrix pattern - very visible */}
+      {/* Parallax floating orbs - these MOVE as you scroll */}
+      <motion.div
+        className="pointer-events-none absolute left-[5%] top-[10%] size-96 rounded-full bg-blue-500/40 blur-[100px] dark:bg-blue-500/25"
+        style={{ y: orbY1 }}
+      />
+      <motion.div
+        className="pointer-events-none absolute right-[10%] top-[30%] size-125 rounded-full bg-purple-500/35 blur-[120px] dark:bg-purple-500/20"
+        style={{ y: orbY2 }}
+      />
+      <motion.div
+        className="pointer-events-none absolute bottom-[20%] left-[30%] size-80 rounded-full bg-pink-500/40 blur-[80px] dark:bg-pink-500/25"
+        style={{ y: orbY3 }}
+      />
+
+      {/* === LAYER 1: SLOW (background) === */}
+      <motion.div
+        className="pointer-events-none absolute left-[3%] top-[5%]"
+        style={{ y: layerSlow }}
+      >
+        <div className="size-8 rotate-45 border-2 border-violet-500/20 dark:border-violet-400/15" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute right-[5%] top-[15%]"
+        style={{ y: layerSlow }}
+      >
+        <div className="size-12 rounded-full border-2 border-blue-500/15 dark:border-blue-400/10" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute left-[12%] top-[70%]"
+        style={{ y: layerSlow }}
+      >
+        <div className="size-10 rotate-12 border-2 border-pink-500/20 dark:border-pink-400/15" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute right-[15%] top-[85%]"
+        style={{ y: layerSlow }}
+      >
+        <div className="size-6 rounded-full border-2 border-emerald-500/20 dark:border-emerald-400/15" />
+      </motion.div>
+
+      {/* === LAYER 2: MEDIUM === */}
+      <motion.div
+        className="pointer-events-none absolute left-[8%] top-[20%]"
+        style={{ y: layerMedium }}
+      >
+        <div className="size-4 rotate-45 rounded-sm bg-violet-500/30 dark:bg-violet-400/20" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute right-[10%] top-[10%]"
+        style={{ y: layerMedium }}
+      >
+        <div className="size-5 rounded-full bg-pink-500/25 dark:bg-pink-400/20" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute left-[20%] top-[45%]"
+        style={{ y: layerMedium }}
+      >
+        <div className="size-3 rounded-full bg-blue-500/35 dark:bg-blue-400/25" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute right-[18%] top-[55%]"
+        style={{ y: layerMedium }}
+      >
+        <div className="size-6 rotate-45 border-2 border-violet-500/30 dark:border-violet-400/20" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute left-[6%] top-[65%]"
+        style={{ y: layerMedium }}
+      >
+        <div className="size-4 rounded-full border-2 border-emerald-500/30 dark:border-emerald-400/20" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute right-[8%] top-[75%]"
+        style={{ y: layerMedium }}
+      >
+        <div className="size-5 rotate-12 bg-purple-500/25 dark:bg-purple-400/20" />
+      </motion.div>
+
+      {/* === LAYER 3: FAST (foreground) === */}
+      <motion.div
+        className="pointer-events-none absolute left-[5%] top-[30%]"
+        style={{ y: layerFast }}
+      >
+        <div className="size-3 rounded-full bg-pink-500/40 dark:bg-pink-400/30" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute right-[7%] top-[40%]"
+        style={{ y: layerFast }}
+      >
+        <div className="size-4 rotate-45 bg-violet-500/35 dark:bg-violet-400/25" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute left-[18%] top-[25%]"
+        style={{ y: layerFast }}
+      >
+        <div className="size-2 rounded-full bg-blue-500/45 dark:bg-blue-400/35" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute right-[22%] top-[35%]"
+        style={{ y: layerFast }}
+      >
+        <div className="size-3 rotate-45 bg-emerald-500/35 dark:bg-emerald-400/25" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute left-[10%] top-[80%]"
+        style={{ y: layerFast }}
+      >
+        <div className="size-4 rounded-full bg-purple-500/30 dark:bg-purple-400/25" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute right-[12%] top-[90%]"
+        style={{ y: layerFast }}
+      >
+        <div className="size-3 rotate-12 bg-pink-500/40 dark:bg-pink-400/30" />
+      </motion.div>
+
+      {/* === LAYER 4: REVERSE (moves up as you scroll down) === */}
+      <motion.div
+        className="pointer-events-none absolute left-[25%] top-[60%]"
+        style={{ y: layerReverse }}
+      >
+        <div className="size-5 rotate-45 border-2 border-cyan-500/25 dark:border-cyan-400/20" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute right-[25%] top-[70%]"
+        style={{ y: layerReverse }}
+      >
+        <div className="size-4 rounded-full border-2 border-violet-500/30 dark:border-violet-400/20" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute left-[30%] top-[40%]"
+        style={{ y: layerReverse }}
+      >
+        <div className="size-3 rounded-full bg-pink-500/30 dark:bg-pink-400/25" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute right-[30%] top-[50%]"
+        style={{ y: layerReverse }}
+      >
+        <div className="size-6 rotate-45 border-2 border-blue-500/20 dark:border-blue-400/15" />
+      </motion.div>
+
+      {/* Static dot pattern */}
       <div
-        className="absolute inset-0 opacity-80 dark:opacity-35"
+        className="pointer-events-none absolute inset-0 opacity-50 dark:opacity-25"
         style={{
-          backgroundImage: `radial-gradient(circle at center, hsl(var(--muted-foreground) / 0.35) 1.5px, transparent 1.5px)`,
-          backgroundSize: '40px 40px',
+          backgroundImage: `radial-gradient(circle at center, hsl(var(--muted-foreground) / 0.3) 1px, transparent 1px)`,
+          backgroundSize: '32px 32px',
         }}
       />
 
-      {/* Horizontal gradient bands - brighter */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-0 top-[30%] h-px w-full bg-linear-to-r from-transparent via-violet-500/50 to-transparent dark:via-violet-500/30" />
-        <div className="absolute left-0 top-[70%] h-px w-full bg-linear-to-r from-transparent via-purple-500/50 to-transparent dark:via-purple-500/30" />
-      </div>
-
       <div className="relative z-10 mx-auto max-w-6xl px-6 lg:px-8">
-        {/* Header with shimmer badge */}
-        <div className="mb-16 text-center sm:mb-20">
-          <Badge
-            variant="outline"
-            className="group relative mb-6 gap-2 overflow-hidden border-violet-500/30 bg-violet-100 px-4 py-2 text-sm text-violet-700 transition-all duration-300 hover:border-violet-500/50 hover:shadow-lg hover:shadow-violet-500/20 dark:bg-violet-950/50 dark:text-violet-200"
+        {/* Header */}
+        <motion.div
+          className="mb-16 text-center sm:mb-24"
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true, margin: '-50px' }}
+        >
+          <motion.div
+            variants={fadeInUp}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
           >
-            {/* Shimmer effect */}
-            <div className="absolute inset-0 -translate-x-full animate-[shimmer_3s_infinite] bg-linear-to-r from-transparent via-white/20 to-transparent" />
-            <Sparkles className="size-4 animate-[pulse_2s_ease-in-out_infinite]" />
-            5-Step Process
-          </Badge>
+            <Badge
+              variant="outline"
+              className="group relative mb-6 gap-2 overflow-hidden border-violet-500/30 bg-violet-100 px-4 py-2 text-sm text-violet-700 transition-all duration-300 hover:border-violet-500/50 hover:shadow-lg hover:shadow-violet-500/20 dark:bg-violet-950/50 dark:text-violet-200"
+            >
+              <div className="absolute inset-0 -translate-x-full animate-[shimmer_3s_infinite] bg-linear-to-r from-transparent via-white/20 to-transparent" />
+              <Sparkles className="size-4 animate-[pulse_2s_ease-in-out_infinite]" />
+              5-Step Process
+            </Badge>
+          </motion.div>
 
-          <h2 className="mb-4 text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+          <motion.h2
+            className="mb-4 text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+            variants={fadeInUp}
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
+          >
             How It{' '}
             <span className="relative inline-block">
-              {/* Glow effect behind text */}
               <span className="absolute inset-0 animate-[pulse_3s_ease-in-out_infinite] bg-linear-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent blur-xl dark:from-violet-400 dark:via-purple-400 dark:to-pink-400">
                 Works
               </span>
@@ -155,58 +359,82 @@ export function HowItWorks() {
                 Works
               </span>
             </span>
-          </h2>
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+          </motion.h2>
+          <motion.p
+            className="mx-auto max-w-2xl text-lg text-muted-foreground"
+            variants={fadeInUp}
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
+          >
             From long-form content to viral clips in minutes. Our AI-powered
             pipeline handles everything{' '}
             <span className="text-violet-600 underline decoration-violet-600/50 underline-offset-4 dark:text-violet-400 dark:decoration-violet-400/50">
               automatically.
             </span>
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        {/* Mobile: Vertical timeline with dramatic cards */}
-        <div className="space-y-6 md:hidden">
+        {/* Mobile: Vertical timeline */}
+        <div className="space-y-4 md:hidden">
           {steps.map((step, index) => {
             const colors = colorClasses[step.color as keyof typeof colorClasses]
 
             return (
-              <div key={step.number} className="relative">
-                {/* Connector line */}
+              <motion.div
+                key={step.number}
+                className="relative"
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, margin: '-30px' }}
+                variants={fadeInUp}
+                transition={{
+                  duration: 0.5,
+                  ease: 'easeOut',
+                  delay: index * 0.08,
+                }}
+              >
+                {/* Connector arrow */}
                 {index < steps.length - 1 && (
-                  <div className="absolute left-6 top-full z-0 h-6 w-px bg-linear-to-b from-border to-transparent" />
+                  <div className="absolute left-6 top-full z-10 flex h-4 w-12 -translate-x-1/2 items-center justify-center">
+                    <motion.div
+                      animate={{ y: [0, 4, 0] }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                    >
+                      <ChevronRight className="size-4 rotate-90 text-muted-foreground/50" />
+                    </motion.div>
+                  </div>
                 )}
 
                 <Card
-                  className={`group relative overflow-hidden border-border bg-card/50 ring-0 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-                    step.highlight
-                      ? `${colors.border} hover:shadow-violet-500/20`
-                      : 'hover:shadow-muted-foreground/10'
-                  }`}
+                  className={`group relative overflow-hidden border-border bg-card/80 ring-0 backdrop-blur-sm transition-all duration-300 hover:shadow-xl ${colors.border} hover:${colors.shadow}`}
                 >
-                  {/* Background glow on hover */}
                   <div
                     className={`absolute -right-10 -top-10 size-32 rounded-full ${colors.glow} opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100`}
                   />
 
                   <CardContent className="relative flex gap-4 p-5">
-                    {/* Number circle with gradient */}
-                    <div className="flex flex-col items-center gap-3">
-                      <div
-                        className={`flex size-12 shrink-0 items-center justify-center rounded-full bg-linear-to-br ${colors.gradient} text-base font-bold text-white shadow-lg ${colors.shadow} transition-transform duration-300 group-hover:scale-110`}
+                    <div className="flex flex-col items-center gap-2">
+                      <motion.div
+                        className={`relative flex size-12 shrink-0 items-center justify-center rounded-full bg-linear-to-br ${colors.gradient} text-base font-bold text-white shadow-lg ${colors.shadow}`}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
                       >
                         {step.number}
-                      </div>
-                      <div
-                        className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${colors.bgLight} ${colors.text} transition-all duration-300 group-hover:scale-105`}
+                      </motion.div>
+                      <motion.div
+                        className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${colors.bgLight} ${colors.text}`}
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        transition={{ type: 'spring', stiffness: 300 }}
                       >
                         <step.icon className="size-5" />
-                      </div>
+                      </motion.div>
                     </div>
 
-                    {/* Content */}
                     <div className="min-w-0 flex-1 pt-1">
-                      <h3 className="mb-2 text-lg font-semibold text-foreground transition-colors duration-300">
+                      <h3 className="mb-1.5 text-lg font-semibold text-foreground">
                         {step.title}
                       </h3>
                       <p className="text-sm leading-relaxed text-muted-foreground">
@@ -215,21 +443,32 @@ export function HowItWorks() {
                     </div>
                   </CardContent>
                 </Card>
-              </div>
+              </motion.div>
             )
           })}
         </div>
 
-        {/* Desktop: Alternating timeline with WOW effect */}
-        <div className="relative hidden md:block">
-          {/* Animated center line with gradient */}
-          <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2">
-            <div className="h-full w-full bg-linear-to-b from-blue-500/50 via-violet-500/50 to-emerald-500/50" />
-            {/* Animated glow on the line */}
-            <div className="absolute inset-0 animate-[pulse_4s_ease-in-out_infinite] bg-linear-to-b from-blue-500/30 via-violet-500/30 to-emerald-500/30 blur-sm" />
+        {/* Desktop: Alternating timeline */}
+        <div className="relative hidden md:block" ref={timelineRef}>
+          {/* Center timeline with animated flow */}
+          <div className="absolute left-1/2 top-0 h-full w-1 -translate-x-1/2">
+            {/* Base gradient line (unfilled) */}
+            <div className="h-full w-full rounded-full bg-muted-foreground/20" />
+
+            {/* Scroll-driven progress fill */}
+            <motion.div
+              className="absolute inset-x-0 top-0 h-full origin-top rounded-full bg-linear-to-b from-blue-500 via-violet-500 to-emerald-500"
+              style={{ scaleY }}
+            />
+
+            {/* Glow effect on the filled portion */}
+            <motion.div
+              className="absolute inset-x-0 top-0 h-full origin-top rounded-full bg-linear-to-b from-blue-500 via-violet-500 to-emerald-500 blur-md"
+              style={{ scaleY, opacity: 0.5 }}
+            />
           </div>
 
-          <div className="space-y-16">
+          <div className="space-y-24">
             {steps.map((step, index) => {
               const isLeft = index % 2 === 0
               const colors =
@@ -243,93 +482,165 @@ export function HowItWorks() {
                   {/* Left side */}
                   <div className={`flex-1 ${isLeft ? 'text-right' : ''}`}>
                     {isLeft && (
-                      <Card
-                        className={`group relative ml-auto max-w-md overflow-hidden border-border bg-card/50 ring-0 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${
-                          step.highlight
-                            ? `${colors.border} hover:shadow-violet-500/20`
-                            : 'hover:shadow-muted-foreground/10'
-                        }`}
+                      <motion.div
+                        initial="initial"
+                        whileInView="animate"
+                        viewport={{ once: true, margin: '-100px' }}
+                        variants={fadeInLeft}
+                        transition={{
+                          duration: 0.6,
+                          ease: [0.22, 1, 0.36, 1],
+                          delay: 0.1,
+                        }}
                       >
-                        {/* Gradient border effect on hover */}
-                        <div
-                          className={`absolute inset-0 rounded-2xl bg-linear-to-r ${colors.gradient} opacity-0 blur-sm transition-opacity duration-300 group-hover:opacity-30`}
-                        />
-                        <div className="absolute inset-px rounded-2xl bg-card" />
+                        <Card
+                          className={`group relative ml-auto max-w-md overflow-hidden border-0 bg-card/80 ring-1 ${colors.ring} backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:${colors.shadow}`}
+                        >
+                          {/* Animated gradient border on hover */}
+                          <motion.div
+                            className={`absolute inset-0 rounded-xl bg-linear-to-r ${colors.gradientVia} opacity-0 transition-opacity duration-500 group-hover:opacity-20`}
+                            animate={{
+                              backgroundPosition: [
+                                '0% 50%',
+                                '100% 50%',
+                                '0% 50%',
+                              ],
+                            }}
+                            transition={{
+                              duration: 3,
+                              repeat: Infinity,
+                              ease: 'linear',
+                            }}
+                            style={{ backgroundSize: '200% 200%' }}
+                          />
 
-                        {/* Background glow */}
-                        <div
-                          className={`absolute -left-10 -top-10 size-40 rounded-full ${colors.glow} opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100`}
-                        />
+                          {/* Glow effect */}
+                          <div
+                            className={`absolute -left-20 -top-20 size-40 rounded-full ${colors.glow} opacity-0 blur-[60px] transition-opacity duration-500 group-hover:opacity-100`}
+                          />
 
-                        <CardContent className="relative p-6">
-                          <div className="mb-4 flex items-center justify-end gap-4">
-                            <h3 className="text-xl font-semibold text-foreground">
-                              {step.title}
-                            </h3>
-                            <div
-                              className={`flex size-12 shrink-0 items-center justify-center rounded-xl ${colors.bgLight} ${colors.text} transition-transform duration-300 group-hover:scale-110`}
-                            >
-                              <step.icon className="size-6" />
+                          <CardContent className="relative p-6">
+                            <div className="mb-4 flex items-center justify-end gap-4">
+                              <h3 className="text-xl font-semibold text-foreground">
+                                {step.title}
+                              </h3>
+                              <motion.div
+                                className={`flex size-14 shrink-0 items-center justify-center rounded-2xl ${colors.bgLight} ${colors.text} shadow-sm`}
+                                whileHover={{ scale: 1.15, rotate: -10 }}
+                                transition={{
+                                  type: 'spring',
+                                  stiffness: 400,
+                                  damping: 10,
+                                }}
+                              >
+                                <step.icon className="size-7" />
+                              </motion.div>
                             </div>
-                          </div>
-                          <p className="text-muted-foreground">
-                            {step.description}
-                          </p>
-                        </CardContent>
-                      </Card>
+                            <p className="text-muted-foreground leading-relaxed">
+                              {step.description}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
                     )}
                   </div>
 
-                  {/* Center node with glow */}
-                  <div className="relative z-10">
+                  {/* Center node */}
+                  <motion.div
+                    className="relative z-10"
+                    initial="initial"
+                    whileInView="animate"
+                    viewport={{ once: true, margin: '-50px' }}
+                    variants={scaleIn}
+                    transition={{
+                      duration: 0.5,
+                      ease: [0.22, 1, 0.36, 1],
+                      delay: 0.2,
+                    }}
+                  >
                     {/* Glow behind node */}
                     <div
-                      className={`absolute inset-0 rounded-full ${colors.glow} blur-xl transition-opacity duration-300`}
+                      className={`absolute -inset-2 rounded-full ${colors.glow} blur-xl`}
                     />
-                    <div
-                      className={`relative flex size-16 items-center justify-center rounded-full bg-linear-to-br ${colors.gradient} text-lg font-bold text-white shadow-xl ${colors.shadow} ring-4 ring-background transition-all duration-300 hover:scale-110`}
+
+                    {/* Main node */}
+                    <motion.div
+                      className={`relative flex size-20 items-center justify-center rounded-full bg-linear-to-br ${colors.gradient} text-2xl font-bold text-white shadow-2xl ${colors.shadow} ring-4 ring-background`}
+                      whileHover={{ scale: 1.15 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 400,
+                        damping: 15,
+                      }}
                     >
                       {step.number}
-                    </div>
-                  </div>
+                    </motion.div>
+                  </motion.div>
 
                   {/* Right side */}
                   <div className="flex-1">
                     {!isLeft && (
-                      <Card
-                        className={`group relative mr-auto max-w-md overflow-hidden border-border bg-card/50 ring-0 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${
-                          step.highlight
-                            ? `${colors.border} hover:shadow-violet-500/20`
-                            : 'hover:shadow-muted-foreground/10'
-                        }`}
+                      <motion.div
+                        initial="initial"
+                        whileInView="animate"
+                        viewport={{ once: true, margin: '-100px' }}
+                        variants={fadeInRight}
+                        transition={{
+                          duration: 0.6,
+                          ease: [0.22, 1, 0.36, 1],
+                          delay: 0.1,
+                        }}
                       >
-                        {/* Gradient border effect on hover */}
-                        <div
-                          className={`absolute inset-0 rounded-2xl bg-linear-to-r ${colors.gradient} opacity-0 blur-sm transition-opacity duration-300 group-hover:opacity-30`}
-                        />
-                        <div className="absolute inset-px rounded-2xl bg-card" />
+                        <Card
+                          className={`group relative mr-auto max-w-md overflow-hidden border-0 bg-card/80 ring-1 ${colors.ring} backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:${colors.shadow}`}
+                        >
+                          {/* Animated gradient border on hover */}
+                          <motion.div
+                            className={`absolute inset-0 rounded-xl bg-linear-to-r ${colors.gradientVia} opacity-0 transition-opacity duration-500 group-hover:opacity-20`}
+                            animate={{
+                              backgroundPosition: [
+                                '0% 50%',
+                                '100% 50%',
+                                '0% 50%',
+                              ],
+                            }}
+                            transition={{
+                              duration: 3,
+                              repeat: Infinity,
+                              ease: 'linear',
+                            }}
+                            style={{ backgroundSize: '200% 200%' }}
+                          />
 
-                        {/* Background glow */}
-                        <div
-                          className={`absolute -right-10 -top-10 size-40 rounded-full ${colors.glow} opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100`}
-                        />
+                          {/* Glow effect */}
+                          <div
+                            className={`absolute -right-20 -top-20 size-40 rounded-full ${colors.glow} opacity-0 blur-[60px] transition-opacity duration-500 group-hover:opacity-100`}
+                          />
 
-                        <CardContent className="relative p-6">
-                          <div className="mb-4 flex items-center gap-4">
-                            <div
-                              className={`flex size-12 shrink-0 items-center justify-center rounded-xl ${colors.bgLight} ${colors.text} transition-transform duration-300 group-hover:scale-110`}
-                            >
-                              <step.icon className="size-6" />
+                          <CardContent className="relative p-6">
+                            <div className="mb-4 flex items-center gap-4">
+                              <motion.div
+                                className={`flex size-14 shrink-0 items-center justify-center rounded-2xl ${colors.bgLight} ${colors.text} shadow-sm`}
+                                whileHover={{ scale: 1.15, rotate: 10 }}
+                                transition={{
+                                  type: 'spring',
+                                  stiffness: 400,
+                                  damping: 10,
+                                }}
+                              >
+                                <step.icon className="size-7" />
+                              </motion.div>
+                              <h3 className="text-xl font-semibold text-foreground">
+                                {step.title}
+                              </h3>
                             </div>
-                            <h3 className="text-xl font-semibold text-foreground">
-                              {step.title}
-                            </h3>
-                          </div>
-                          <p className="text-muted-foreground">
-                            {step.description}
-                          </p>
-                        </CardContent>
-                      </Card>
+                            <p className="text-muted-foreground leading-relaxed">
+                              {step.description}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
                     )}
                   </div>
                 </div>
@@ -338,20 +649,29 @@ export function HowItWorks() {
           </div>
         </div>
 
-        {/* Footer with subtle animation */}
-        <div className="mt-16 text-center sm:mt-20">
-          <p className="text-muted-foreground">
-            Average processing time:{' '}
-            <span className="font-semibold text-foreground">2-5 minutes</span>{' '}
-            for a 1-hour video
-          </p>
-        </div>
+        {/* Footer */}
+        <motion.div
+          className="mt-20 text-center sm:mt-28"
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        >
+          <Badge
+            variant="outline"
+            className="gap-2 border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-600 dark:text-emerald-400"
+          >
+            <Sparkles className="size-4" />
+            Average processing time: 2-5 minutes for a 1-hour video
+          </Badge>
+        </motion.div>
       </div>
 
-      {/* Bottom gradient line with glow */}
+      {/* Bottom gradient line */}
       <div className="absolute inset-x-0 bottom-0">
         <div className="h-px bg-linear-to-r from-transparent via-violet-500/50 to-transparent" />
-        <div className="h-6 bg-linear-to-t from-violet-500/5 to-transparent" />
+        <div className="h-8 bg-linear-to-t from-violet-500/5 to-transparent" />
       </div>
     </section>
   )

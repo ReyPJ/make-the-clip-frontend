@@ -1,9 +1,24 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import {
+  HeadContent,
+  Outlet,
+  Scripts,
+  createRootRoute,
+} from '@tanstack/react-router'
+// import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+// import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import appCss from '../styles.css?url'
 import { ThemeProvider } from '@/hooks/use-theme'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000, // 1 minute
+      retry: 1,
+    },
+  },
+})
 
 export const Route = createRootRoute({
   head: () => ({
@@ -27,8 +42,17 @@ export const Route = createRootRoute({
     ],
   }),
 
+  component: RootComponent,
   shellComponent: RootDocument,
 })
+
+function RootComponent() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Outlet />
+    </QueryClientProvider>
+  )
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -40,7 +64,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <ThemeProvider defaultTheme="dark" storageKey="ui-theme">
           {children}
         </ThemeProvider>
-        <TanStackDevtools
+        {/* <TanStackDevtools
           config={{
             position: 'bottom-right',
           }}
@@ -50,7 +74,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               render: <TanStackRouterDevtoolsPanel />,
             },
           ]}
-        />
+        />*/}
         <Scripts />
       </body>
     </html>
