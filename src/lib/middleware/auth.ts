@@ -1,15 +1,33 @@
 import { createMiddleware } from '@tanstack/react-start'
 import { redirect } from '@tanstack/react-router'
 
+const isProduction = import.meta.env.VITE_ENV === 'production'
+
 /**
- * Middleware to protect server functions
- * Validates that the user is authenticated before proceeding
+ * Middleware for route protection
+ * Use this in route's server.middleware array
+ * Only active in production (cookies are cross-origin in development)
  */
-export const authMiddleware = createMiddleware({ type: 'function' }).server(
-  async ({ next }) => {
-    // The cookies are automatically sent with withCredentials: true
-    // The API will validate the session cookie and return 401 if invalid
-    // This middleware just ensures we have the context ready
+export const authMiddleware = createMiddleware({ type: 'request' }).server(
+  async ({ next, request }) => {
+    // Skip auth check in development (cookies are on different domain)
+    if (!isProduction) {
+      return next({
+        context: {
+          isAuthenticated: true,
+        },
+      })
+    }
+
+    // Check for access_token cookie
+    const cookies = request.headers.get('cookie') || ''
+    const hasAuthCookie = cookies.includes('access_token=')
+
+    if (!hasAuthCookie) {
+      throw redirect({
+        to: '/',
+      })
+    }
 
     return next({
       context: {
@@ -20,7 +38,21 @@ export const authMiddleware = createMiddleware({ type: 'function' }).server(
 )
 
 /**
- * Middleware for route protection (use in route beforeLoad)
+ * Middleware to protect server functions
+ * Use this for createServerFn middleware
+ */
+export const authFunctionMiddleware = createMiddleware({
+  type: 'function',
+}).server(async ({ next }) => {
+  return next({
+    context: {
+      isAuthenticated: true,
+    },
+  })
+})
+
+/**
+ * Helper for route protection (use in route beforeLoad on client)
  * Redirects to home if not authenticated
  */
 export function requireAuth(isAuthenticated: boolean) {

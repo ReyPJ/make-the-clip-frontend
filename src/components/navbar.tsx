@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Link } from '@tanstack/react-router'
-import { Menu, Moon, Scissors, Sun, User, X } from 'lucide-react'
+import { Link, useNavigate } from '@tanstack/react-router'
+import {
+  LayoutDashboard,
+  Menu,
+  Moon,
+  Scissors,
+  Sun,
+  User,
+  X,
+} from 'lucide-react'
 
 import { Separator } from './ui/separator'
 import { AuthDialog } from './auth-dialog'
@@ -45,6 +53,8 @@ export function Navbar() {
     'login',
   )
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10)
@@ -73,15 +83,28 @@ export function Navbar() {
         }`}
       >
         <nav className="container relative mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-violet-600">
-              <Scissors className="size-4 text-white" />
-            </div>
-            <span className="text-lg font-semibold text-foreground">
-              Make The Clip
-            </span>
-          </Link>
+          {/* Logo + Dashboard button */}
+          <div className="flex items-center gap-4">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="flex size-8 items-center justify-center rounded-lg bg-violet-600">
+                <Scissors className="size-4 text-white" />
+              </div>
+              <span className="text-lg font-semibold text-foreground">
+                Make The Clip
+              </span>
+            </Link>
+
+            {isAuthenticated && (
+              <Button
+                size="sm"
+                className="hidden cursor-pointer gap-1.5 bg-violet-600 text-white shadow-md shadow-violet-600/25 transition-all hover:bg-violet-500 hover:shadow-lg hover:shadow-violet-600/30 md:flex"
+                onClick={() => navigate({ to: '/dashboard' })}
+              >
+                <LayoutDashboard className="size-4" />
+                Dashboard
+              </Button>
+            )}
+          </div>
 
           {/* Desktop Navigation */}
           <div className="absolute left-1/2 hidden -translate-x-1/2 items-center md:flex">
