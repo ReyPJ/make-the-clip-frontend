@@ -45,7 +45,7 @@ const navLinks = [
 
 export function Navbar() {
   const { theme, setTheme, resolvedTheme } = useTheme()
-  const { user, isAuthenticated, isLoading } = useAuth()
+  const { user, isAuthenticated, isLoading, logout } = useAuth()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [authDialogOpen, setAuthDialogOpen] = useState(false)
@@ -212,7 +212,10 @@ export function Navbar() {
                           <Separator className="my-1" />
                         </li>
                         <li>
-                          <NavigationMenuLink className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm text-red-500 transition-colors hover:bg-red-500/10">
+                          <NavigationMenuLink
+                            className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm text-red-500 transition-colors hover:bg-red-500/10"
+                            onClick={() => logout()}
+                          >
                             Sign Out
                           </NavigationMenuLink>
                         </li>
@@ -345,7 +348,10 @@ export function Navbar() {
                       size="lg"
                       variant="outline"
                       className="h-12 w-full text-base font-semibold text-red-500 hover:bg-red-500/10 hover:text-red-500"
-                      onClick={() => setOpen(false)}
+                      onClick={() => {
+                        setOpen(false)
+                        logout()
+                      }}
                     >
                       Sign Out
                     </Button>
