@@ -16,6 +16,7 @@ interface Plan {
   icon: typeof Zap
   color: 'slate' | 'blue' | 'violet' | 'amber'
   cta: string
+  maxVideoSizeMb: number
 }
 
 const plans: Array<Plan> = [
@@ -26,9 +27,11 @@ const plans: Array<Plan> = [
     icon: Zap,
     color: 'slate',
     cta: 'Get Started',
+    maxVideoSizeMb: 600,
     features: [
-      '5 clips per month',
+      '25 clips per month',
       '15 minute max video',
+      '600 MB max upload size',
       '1 GB storage',
       'Basic support',
       'Standard processing',
@@ -42,9 +45,11 @@ const plans: Array<Plan> = [
     icon: Rocket,
     color: 'blue',
     cta: 'Start Creating',
+    maxVideoSizeMb: 1024,
     features: [
-      '12 clips per month',
+      '50 clips per month',
       '30 minute max video',
+      '1 GB max upload size',
       '10 GB storage',
       'Email support',
       'No watermark',
@@ -60,9 +65,11 @@ const plans: Array<Plan> = [
     color: 'violet',
     cta: 'Go Pro',
     popular: true,
+    maxVideoSizeMb: 2048,
     features: [
-      '60 clips per month',
+      '120 clips per month',
       '60 minute max video',
+      '2 GB max upload size',
       '100 GB storage',
       'Priority support',
       'No watermark',
@@ -78,9 +85,11 @@ const plans: Array<Plan> = [
     icon: Star,
     color: 'amber',
     cta: 'Contact Sales',
+    maxVideoSizeMb: 5120,
     features: [
       'Unlimited clips',
       '180 minute max video',
+      '5 GB max upload size',
       '1 TB storage',
       'Dedicated support',
       'No watermark',

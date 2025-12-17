@@ -132,7 +132,8 @@ export function Hero() {
                     variant="outline"
                     className="gap-1.5 border-violet-500/30 bg-violet-500/10 px-3 py-1.5 text-sm text-violet-600 dark:text-violet-400"
                   >
-                    <Zap className="size-3.5" />5 clips remaining
+                    <Zap className="size-3.5" />
+                    Up to 25 clips in Free plan
                   </Badge>
                 </motion.div>
                 <motion.div
@@ -224,7 +225,7 @@ export function Hero() {
                     className="gap-1.5 border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-sm text-emerald-600 dark:text-emerald-400"
                   >
                     <Check className="size-3.5" />
-                    Free 5 clips mounth
+                    Free 25 clips/month
                   </Badge>
                 </motion.div>
                 <motion.div

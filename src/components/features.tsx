@@ -60,7 +60,7 @@ const mainFeatures: Array<Feature> = [
     icon: Video,
     title: 'Multiple Format Support',
     description:
-      'Upload MP4, MOV, AVI, MKV, or WebM files up to 600MB. We handle the conversion automatically.',
+      'Upload MP4, MOV, AVI, MKV, or WebM files. Size limits vary by plan (up to 5GB). We handle the conversion automatically.',
     color: 'blue',
   },
   {
@@ -383,7 +383,7 @@ export function Features() {
               <div className="grid gap-8 text-center sm:grid-cols-2 lg:grid-cols-4">
                 {[
                   { value: '2-5', label: 'Minutes Processing', suffix: 'min' },
-                  { value: '600', label: 'Max File Size', suffix: 'MB' },
+                  { value: '5', label: 'Max File Size', suffix: 'GB' },
                   { value: '5', label: 'Formats Supported', suffix: '+' },
                   { value: '99.9', label: 'Uptime', suffix: '%' },
                 ].map((stat, index) => (
@@ -498,22 +498,22 @@ export function Features() {
 
                 <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
                   <span className="flex items-center gap-2 text-muted-foreground">
-                    <span className="font-semibold text-foreground">FREE</span>5
-                    clips/month
+                    <span className="font-semibold text-foreground">FREE</span>
+                    25 clips/month
                   </span>
                   <span className="text-border">|</span>
                   <span className="flex items-center gap-2 text-muted-foreground">
                     <span className="font-semibold text-foreground">
                       STARTER
                     </span>
-                    12 clips/month
+                    50 clips/month
                   </span>
                   <span className="text-border">|</span>
                   <span className="flex items-center gap-2 text-muted-foreground">
                     <span className="font-semibold text-violet-600 dark:text-violet-400">
                       PRO
                     </span>
-                    60 clips/month
+                    120 clips/month
                   </span>
                   <span className="text-border">|</span>
                   <span className="flex items-center gap-2 text-muted-foreground">

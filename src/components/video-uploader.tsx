@@ -5,9 +5,13 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+// import { useNavigate } from '@tanstack/react-router'
 
 interface VideoUploaderProps {
   onUpload?: (file: File) => void
+  maxVideoSizeMb?: number
 }
 
 const fadeInUp = {
@@ -15,12 +19,21 @@ const fadeInUp = {
   animate: { opacity: 1, y: 0 },
 }
 
-export function VideoUploader({ onUpload }: VideoUploaderProps) {
+const DEFAULT_MAX_SIZE_MB = 600
+
+export function VideoUploader({
+  onUpload,
+  maxVideoSizeMb = DEFAULT_MAX_SIZE_MB,
+}: VideoUploaderProps) {
   const [isDragging, setIsDragging] = useState(false)
   const [file, setFile] = useState<File | null>(null)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
+  const [videoTitle, setVideoTitle] = useState('')
+  const [clipsCount, setClipsCount] = useState(3)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // const navigate = useNavigate()
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -203,7 +216,10 @@ export function VideoUploader({ onUpload }: VideoUploaderProps) {
               </div>
 
               <p className="mt-4 text-sm text-muted-foreground/60">
-                Maximum file size: 2GB
+                Maximum file size:{' '}
+                {maxVideoSizeMb >= 1024
+                  ? `${(maxVideoSizeMb / 1024).toFixed(0)}GB`
+                  : `${maxVideoSizeMb}MB`}
               </p>
             </div>
           ) : (
@@ -233,6 +249,56 @@ export function VideoUploader({ onUpload }: VideoUploaderProps) {
                 )}
               </div>
 
+              {/* Video settings form */}
+              {!isUploading && uploadProgress < 100 && (
+                <div className="space-y-4 rounded-xl bg-muted/30 p-4">
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="video-title"
+                      className="text-muted-foreground"
+                    >
+                      Video Title
+                      <span className="ml-1 text-xs text-muted-foreground/60">
+                        (optional)
+                      </span>
+                    </Label>
+                    <Input
+                      id="video-title"
+                      placeholder="Enter a title for your video..."
+                      value={videoTitle}
+                      onChange={(e) => setVideoTitle(e.target.value)}
+                      className="bg-background/50"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="clips-count"
+                      className="text-muted-foreground"
+                    >
+                      Number of Clips
+                    </Label>
+                    <Input
+                      id="clips-count"
+                      type="number"
+                      min={1}
+                      placeholder="Enter number of clips..."
+                      value={clipsCount}
+                      onChange={(e) =>
+                        setClipsCount(
+                          Math.max(1, parseInt(e.target.value) || 1),
+                        )
+                      }
+                      className="bg-background/50"
+                    />
+                    <p className="text-xs text-muted-foreground/60">
+                      AI will extract the {clipsCount} best viral moments from
+                      your video
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {/* Progress bar */}
               {isUploading && (
                 <motion.div
@@ -254,27 +320,13 @@ export function VideoUploader({ onUpload }: VideoUploaderProps) {
               {!isUploading && uploadProgress < 100 && (
                 <Button
                   size="lg"
-                  className="group relative w-full gap-2 overflow-hidden bg-violet-600 text-white shadow-lg shadow-violet-600/25 transition-all duration-300 hover:bg-violet-500 hover:shadow-xl hover:shadow-violet-600/40"
+                  className="group relative cursor-pointer w-full gap-2 overflow-hidden bg-violet-600 text-white shadow-lg shadow-violet-600/25 transition-all duration-300 hover:bg-violet-500 hover:shadow-xl hover:shadow-violet-600/40"
                   onClick={handleUpload}
                 >
                   <span className="absolute inset-0 bg-linear-to-r from-violet-400 to-purple-400 opacity-0 transition-opacity duration-300 group-hover:opacity-20" />
                   <Sparkles className="size-5" />
                   Generate Clips with AI
                 </Button>
-              )}
-
-              {/* Success state */}
-              {uploadProgress >= 100 && (
-                <motion.div
-                  className="text-center"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                >
-                  <Badge className="gap-2 bg-emerald-500/10 px-4 py-2 text-emerald-600 dark:text-emerald-400">
-                    <Sparkles className="size-4" />
-                    Processing your video...
-                  </Badge>
-                </motion.div>
               )}
             </div>
           )}

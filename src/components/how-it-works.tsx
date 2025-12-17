@@ -17,7 +17,7 @@ const steps = [
     number: 1,
     title: 'Upload Your Video',
     description:
-      'Drop your podcast, interview, or gameplay. We support MP4, MOV, AVI, MKV, and WebM up to 600MB.',
+      'Drop your podcast, interview, or gameplay. We support MP4, MOV, AVI, MKV, and WebM. File size limits depend on your plan.',
     icon: Upload,
     color: 'blue',
   },

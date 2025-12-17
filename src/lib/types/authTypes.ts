@@ -9,6 +9,7 @@ interface BaseUser {
 interface UserMe extends BaseUser {
   videos_uploaded_this_month: number
   max_video_duration_minutes: number
+  max_video_size_mb: number
   is_active: boolean
   created_at: string
 }

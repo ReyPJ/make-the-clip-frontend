@@ -16,7 +16,7 @@ const faqs: Array<FAQItem> = [
   {
     question: 'What video formats do you support?',
     answer:
-      'We support MP4, MOV, AVI, MKV, and WebM files up to 600MB. Our system automatically handles the conversion and optimization for processing.',
+      'We support MP4, MOV, AVI, MKV, and WebM files. File size limits vary by plan: Free (600MB), Starter (1GB), Pro (2GB), Business (5GB). Our system automatically handles the conversion and optimization for processing.',
     category: 'technical',
   },
   {
@@ -64,7 +64,7 @@ const faqs: Array<FAQItem> = [
   {
     question: "What's the maximum video length I can upload?",
     answer:
-      'It depends on your plan: Free (15 min), Starter (30 min), Pro (60 min), Business (180 min). File size is capped at 600MB for all plans.',
+      'It depends on your plan: Free (15 min), Starter (30 min), Pro (60 min), Business (180 min). File size limits also vary by plan: Free (600MB), Starter (1GB), Pro (2GB), Business (5GB).',
     category: 'general',
   },
   {
